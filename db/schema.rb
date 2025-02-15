@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_15_180132) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_15_183007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -34,6 +34,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_15_180132) do
     t.string "word"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "wordle_id", null: false
+    t.index ["wordle_id"], name: "index_guesses_on_wordle_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -62,5 +64,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_15_180132) do
 
   add_foreign_key "boards", "answers"
   add_foreign_key "boards", "wordles"
+  add_foreign_key "guesses", "wordles"
   add_foreign_key "wordles", "users"
 end
