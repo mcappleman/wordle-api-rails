@@ -24,7 +24,7 @@ class Wordle < ApplicationRecord
   def check_guess(guess)
     # Check if the guess is correct.
     num_of_guesses = self.guesses.length
-    boards = self.boards.find_by(status: "active")
+    boards = self.boards.where(status: "active")
     boards.each do |board|
       if board.answer.word == guess
         # If the guess is correct, update the board status to "solved".
@@ -36,14 +36,21 @@ class Wordle < ApplicationRecord
     end
   end
 
-  def game_over
+  def game_over?
+    self.boards.each do |board|
+      board.board_won?
+    end
     # Check if the game is over.
-    boards = self.boards.find_by(status: "active")
+    boards = self.boards.where(status: "active")
     if boards.length == 0
       self.update(status: "completed")
     elsif self.guesses.length >= self.max_guesses
       self.update(status: "failed")
     end
+    if self.status == "completed" || self.status == "failed"
+      return true
+    end
+    false
   end
 
   def to_json

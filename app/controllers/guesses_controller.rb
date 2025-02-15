@@ -7,6 +7,8 @@ class GuessesController < ApplicationController
 
     if @guess.save
       wordle = Wordle.find(@guess.wordle_id)
+      wordle.check_guess(@guess.word)
+      wordle.game_over?
       render json: wordle.to_json, status: :created, location: wordle
     else
       render json: @guess.errors, status: :unprocessable_entity

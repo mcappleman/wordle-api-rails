@@ -2,6 +2,18 @@ class Board < ApplicationRecord
   belongs_to :wordle
   belongs_to :answer
 
+  def board_won?
+    # Check if the board has been won.
+    if self.answer.word == self.wordle.guesses.last.word
+      self.status == "solved"
+      self.save
+      return true
+    end
+    false
+  end
+
+
+
   def get_color_codes(guesses)
     # Color code the guesses.
     # The color code is based on the number of correct guesses.
