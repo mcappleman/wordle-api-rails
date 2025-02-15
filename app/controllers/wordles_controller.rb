@@ -3,7 +3,9 @@ class WordlesController < ApplicationController
 
   # GET /wordles
   def index
-    @wordles = Wordle.all
+    parameters = params.permit(:status)
+    parameters[:user_id] = @current_user.id
+    @wordles = Wordle.where(parameters)
 
     render json: @wordles
   end
@@ -16,18 +18,13 @@ class WordlesController < ApplicationController
   # POST /wordles
   def create
     @wordle = Wordle.new(wordle_params)
+    @wordle.user_id = @current_user.id
+    @wordle.max_guesses = @wordle.num_of_boards + 5
+    @wordle.status = "active"
 
     if @wordle.save
+      @wordle.create_boards
       render json: @wordle, status: :created, location: @wordle
-    else
-      render json: @wordle.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /wordles/1
-  def update
-    if @wordle.update(wordle_params)
-      render json: @wordle
     else
       render json: @wordle.errors, status: :unprocessable_entity
     end
@@ -46,6 +43,6 @@ class WordlesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def wordle_params
-      params.expect(wordle: [ :status ])
+      params.permit(:num_of_boards)
     end
 end

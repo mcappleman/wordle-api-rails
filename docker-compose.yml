@@ -3,22 +3,33 @@ version: '3.8'
 services:
   db:
     image: postgres:15
+    container_name: wordle_postgres
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: wordle_api_development
+      POSTGRES_DB: wordle_api_rails_development
+    ports:
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
 
-  web:
-    build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0' -p 3001"
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: wordle-api-rails
+    tty: true
+    stdin_open: true
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/wordle_api_rails_development
     volumes:
       - .:/app
     ports:
       - "3001:3001"
     depends_on:
       - db
+    command: bash -c "bundle install && rails db:migrate && rails server -b 0.0.0.0 -p 3001"
 
 volumes:
   db_data:

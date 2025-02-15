@@ -1,0 +1,16 @@
+FROM ruby:3.4.1 
+
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+  build-essential \
+  nodejs \
+  postgresql-client
+
+WORKDIR /app
+
+COPY . /app
+
+RUN bundle install
+
+EXPOSE 3001
+
+CMD [ "rails", "server", "-b", "0.0.0.0", "-p", "3001" ]

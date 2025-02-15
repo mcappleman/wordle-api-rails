@@ -54,3 +54,11 @@ gem "jwt", "~> 2.10"
 gem "bcrypt", "~> 3.1"
 
 gem "dotenv", "~> 3.1"
+
+gem "devise", "~> 4.9"
+
+gem "omniauth", "~> 2.1"
+
+gem "omniauth-google-oauth2", "~> 1.2"
+
+gem "omniauth-facebook", "~> 10.0"

@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 
     if @user.save
       auth_token = AuthenticateUser.new(@user.email, @user.password).call
-      render json: { user: @user, auth_token: auth_token }, status: :created
+      render json: { user: @user.as_json, auth_token: auth_token }, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -48,6 +48,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :email, :first_name, :last_name, :password ])
+      params.permit(:first_name, :last_name, :email, :password, :password_confirmation)
     end
 end
