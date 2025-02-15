@@ -8,7 +8,7 @@ class WordlesController < ApplicationController
     @wordles = Wordle.where(parameters)
     games = []
     @wordles.each do |wordle|
-      games << get_json_object(wordle)
+      games << wordle.to_json
     end
 
     render json: games
@@ -16,7 +16,7 @@ class WordlesController < ApplicationController
 
   # GET /wordles/1
   def show
-    render json: get_json_object(@wordle)
+    render json: @wordle.to_json
   end
 
   # POST /wordles
@@ -28,7 +28,7 @@ class WordlesController < ApplicationController
 
     if @wordle.save
       @wordle.create_boards
-      render json: @wordle, status: :created, location: @wordle
+      render json: @wordle.to_json, status: :created, location: @wordle
     else
       render json: @wordle.errors, status: :unprocessable_entity
     end
@@ -48,23 +48,5 @@ class WordlesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def wordle_params
       params.permit(:num_of_boards)
-    end
-
-    def get_json_object(wordle)
-      return_boards = []
-      wordle.boards.each do |board|
-        return_boards << board.get_json_object
-      end
-      {
-        id: wordle.id,
-        user_id: wordle.user_id,
-        max_guesses: wordle.max_guesses,
-        num_of_boards: wordle.num_of_boards,
-        status: wordle.status,
-        created_at: wordle.created_at,
-        updated_at: wordle.updated_at,
-        boards: return_boards,
-        guesses: wordle.guesses
-      }
     end
 end

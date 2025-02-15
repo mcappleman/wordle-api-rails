@@ -7,7 +7,7 @@ class GuessesController < ApplicationController
 
     if @guess.save
       wordle = Wordle.find(@guess.wordle_id)
-      render json: wordle, status: :created, location: wordle
+      render json: wordle.to_json, status: :created, location: wordle
     else
       render json: @guess.errors, status: :unprocessable_entity
     end
@@ -21,6 +21,6 @@ class GuessesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def guess_params
-      params.expect(guess: [ :word, :wordle_id ])
+      params.permit(:word, :wordle_id)
     end
 end

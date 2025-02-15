@@ -11,14 +11,14 @@ class Board < ApplicationRecord
     guesses.each do |guess|
       color_code = []
       answer.each_char.with_index do |char, index|
-        if guess.include?(char)
-          if guess[index] == char
-            color_code << "green"
+        if guess.word.include?(char)
+          if guess.word[index] == char
+            color_code << {char: guess.word[index], color: "green"}
           else
-            color_code << "yellow"
+            color_code << {char: guess.word[index], color: "yellow"}
           end
         else
-          color_code << "gray"
+          color_code << {char: guess.word[index], color: "gray"}
         end
       end
       color_codes << color_code
@@ -26,10 +26,11 @@ class Board < ApplicationRecord
     color_codes
   end
 
-  def get_json_object
+  def to_json
     {
       id: self.id,
       status: self.status,
+      answer: self.answer.word,
       codes: self.get_color_codes(self.wordle.guesses)
     }
   end
