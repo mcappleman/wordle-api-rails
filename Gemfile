@@ -47,3 +47,8 @@ group :development, :test do
 end
 
 
+
+gem "pry-nav", "~> 1.0"
+
+gem "jwt", "~> 2.10"
+gem "bcrypt", "~> 3.1"
