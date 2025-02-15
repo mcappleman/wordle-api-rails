@@ -1,18 +1,18 @@
 require "test_helper"
 
-class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
+class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @authentication = authentications(:one)
+    @authentication = authentication(:one)
   end
 
   test "should get index" do
-    get authentications_url, as: :json
+    get authentication_url, as: :json
     assert_response :success
   end
 
   test "should create authentication" do
     assert_difference("Authentication.count") do
-      post authentications_url, params: { authentication: {} }, as: :json
+      post authentication_url, params: { authentication: {} }, as: :json
     end
 
     assert_response :created
