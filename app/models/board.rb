@@ -22,9 +22,9 @@ class Board < ApplicationRecord
     color_codes = []
     guesses.each do |guess|
       color_code = []
-      answer.each_char.with_index do |char, index|
-        if guess.word.include?(char)
-          if guess.word[index] == char
+      guess.word.each_char.with_index do |char, index|
+        if answer.include?(char)
+          if answer[index] == char
             color_code << {char: guess.word[index], color: "green"}
           else
             color_code << {char: guess.word[index], color: "yellow"}
@@ -34,6 +34,9 @@ class Board < ApplicationRecord
         end
       end
       color_codes << color_code
+      if guess.word == answer
+        break;
+      end
     end
     color_codes
   end
