@@ -17,14 +17,14 @@ module ExceptionHandler
   private
 
   def four_twenty_two(e)
-    json_response({ message: e.message }, :unprocessable_entity)
+    render json: { message: e.message }, status: :unprocessable_entity
   end
 
   def four_ninety_eight(e)
-    json_response({ message: e.message }, :invalid_token)
+    render json: { message: e.message }, status: :invalid_token
   end
 
   def unauthorized_request(e)
-    json_response({ message: e.message }, :unauthorized)
+    render json: { message: e.message }, status: :unauthorized
   end
 end

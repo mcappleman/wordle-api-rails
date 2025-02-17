@@ -52,20 +52,4 @@ class Wordle < ApplicationRecord
     end
     false
   end
-
-  def to_json
-    # Return a JSON representation of the wordle.
-    boards = []
-    self.boards.each do |board|
-      boards << board.to_json
-    end
-    {
-      id: self.id,
-      user_id: self.user_id,
-      max_guesses: self.max_guesses,
-      status: self.status,
-      boards: boards,
-      guesses: self.guesses
-    }
-  end
 end

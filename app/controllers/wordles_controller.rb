@@ -6,17 +6,13 @@ class WordlesController < ApplicationController
     parameters = params.permit(:status)
     parameters[:user_id] = @current_user.id
     @wordles = Wordle.where(parameters)
-    games = []
-    @wordles.each do |wordle|
-      games << wordle.to_json
-    end
 
-    render json: games
+    render json: @wordles.to_json(:include => [ :guesses, { :boards => { :include => { :board_rows => { :include => :board_cells }}}} ])
   end
 
   # GET /wordles/1
   def show
-    render json: @wordle.to_json
+    render json: @wordle.to_json(:include => [ :guesses, { :boards => { :include => { :board_rows => { :include => :board_cells }}}}])
   end
 
   # POST /wordles
@@ -28,7 +24,7 @@ class WordlesController < ApplicationController
 
     if @wordle.save
       @wordle.create_boards
-      render json: @wordle.to_json, status: :created, location: @wordle
+      render json: @wordle, status: :created, location: @wordle
     else
       render json: @wordle.errors, status: :unprocessable_entity
     end

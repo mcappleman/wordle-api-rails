@@ -1,6 +1,7 @@
 class Board < ApplicationRecord
   belongs_to :wordle
   belongs_to :answer
+  has_many :board_rows
 
   def board_won?
     # Check if the board has been won.
@@ -12,41 +13,26 @@ class Board < ApplicationRecord
     false
   end
 
+  def add_row(guess)
+    # Add a row to the board.
+    if self.status != "active"
+      return
+    end
+    board_row = self.board_rows.create
+    board_row.save
 
-
-  def get_color_codes(guesses)
-    # Color code the guesses.
-    # The color code is based on the number of correct guesses.
-    # Green represents a correct guess, yellow represents a correct letter in the wrong position, and red represents an incorrect guess.
-    answer = self.answer.word
-    color_codes = []
-    guesses.each do |guess|
-      color_code = []
-      guess.word.each_char.with_index do |char, index|
-        if answer.include?(char)
-          if answer[index] == char
-            color_code << {char: guess.word[index], color: "green"}
-          else
-            color_code << {char: guess.word[index], color: "yellow"}
-          end
+    guess.each_char.with_index do |char, index|
+      color = "gray"
+      if self.answer.word.include?(char)
+        if self.answer.word[index] == char
+          color = "green"
         else
-          color_code << {char: guess.word[index], color: "gray"}
+          color = "yellow"
         end
       end
-      color_codes << color_code
-      if guess.word == answer
-        break;
-      end
-    end
-    color_codes
-  end
 
-  def to_json
-    {
-      id: self.id,
-      status: self.status,
-      answer: self.answer.word,
-      codes: self.get_color_codes(self.wordle.guesses)
-    }
+      cell = board_row.board_cells.create(char: char, color: color)
+      cell.save
+    end
   end
 end
