@@ -4,6 +4,7 @@ class GuessesController < ApplicationController
   # POST /guesses
   def create
     @guess = Guess.new(guess_params)
+    @guess.word = @guess.word.upcase
 
     if @guess.save
       wordle = Wordle.find(@guess.wordle_id)
@@ -12,7 +13,7 @@ class GuessesController < ApplicationController
       end
       wordle.check_guess(@guess.word)
       wordle.game_over?
-      render json: wordle.to_json(:include => [ :guesses, { :boards => { :include => { :board_rows => { :include => :board_cells }}}}]), status: :created, location: wordle
+      render json: wordle.to_json(include: [ :guesses, { boards: { include: { board_rows: { include: :board_cells } } } } ]), status: :created, location: wordle
     else
       render json: @guess.errors, status: :unprocessable_entity
     end

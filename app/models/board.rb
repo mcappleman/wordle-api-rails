@@ -23,8 +23,8 @@ class Board < ApplicationRecord
 
     guess.each_char.with_index do |char, index|
       color = "gray"
-      if self.answer.word.include?(char)
-        if self.answer.word[index] == char
+      if self.answer.word.upcase.include?(char)
+        if self.answer.word.upcase[index] == char
           color = "green"
         else
           color = "yellow"
