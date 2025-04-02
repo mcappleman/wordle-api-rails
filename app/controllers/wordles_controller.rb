@@ -36,12 +36,10 @@ class WordlesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_wordle
       @wordle = Wordle.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def wordle_params
       params.permit(:num_of_boards)
     end

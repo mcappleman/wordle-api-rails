@@ -4,7 +4,6 @@ class Board < ApplicationRecord
   has_many :board_rows
 
   def board_won?
-    # Check if the board has been won.
     if self.answer.word == self.wordle.guesses.last.word
       self.status == "solved"
       self.save
@@ -14,7 +13,6 @@ class Board < ApplicationRecord
   end
 
   def add_row(guess)
-    # Add a row to the board.
     if self.status != "active"
       return
     end
@@ -24,6 +22,7 @@ class Board < ApplicationRecord
     guess.each_char.with_index do |char, index|
       color = "gray"
       if self.answer.word.upcase.include?(char)
+        # Need to add validation for the number of each characters present in the answer as well
         if self.answer.word.upcase[index] == char
           color = "green"
         else
