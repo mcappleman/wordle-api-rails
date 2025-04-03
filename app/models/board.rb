@@ -18,15 +18,19 @@ class Board < ApplicationRecord
     end
     board_row = self.board_rows.create
     board_row.save
-
+    answer_char_count = self.answer.word.upcase.chars.tally
     guess.each_char.with_index do |char, index|
       color = "gray"
-      if self.answer.word.upcase.include?(char)
-        # Need to add validation for the number of each characters present in the answer as well
-        if self.answer.word.upcase[index] == char
-          color = "green"
+      if self.answer.word.upcase[index] == char
+        color = "green"
+        answer_char_count[char] -= 1
+      elsif self.answer.word.upcase.include?(char) && answer_char_count[char] > 0
+        answer_char_index = self.answer.word.upcase.index(char)
+        if guess[answer_char_index] == char && answer_char_count[char] < 2
+          color = "gray"
         else
           color = "yellow"
+          answer_char_count[char] -= 1
         end
       end
 

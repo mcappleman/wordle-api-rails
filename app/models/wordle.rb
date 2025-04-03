@@ -31,15 +31,16 @@ class Wordle < ApplicationRecord
   end
 
   def game_over?
+    self.boards.reload
     self.boards.each do |board|
       board.board_won?
     end
     boards = self.boards.where(status: "active")
-    if boards.length == 0
+    failed_boards = self.boards.where(status: "failed")
+    if boards.length == 0 && failed_boards.length == 0
       self.update(status: "completed")
     elsif self.guesses.length >= self.max_guesses
       self.update(status: "failed")
-      self.boards.reload
     end
     self.save
     if self.status == "completed" || self.status == "failed"
