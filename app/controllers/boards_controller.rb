@@ -39,12 +39,10 @@ class BoardsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_board
       @board = Board.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def board_params
       params.expect(board: [ :status, :answer ])
     end

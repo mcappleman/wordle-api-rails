@@ -1,7 +1,7 @@
 class Wordle < ApplicationRecord
   belongs_to :user
-  has_many :boards
-  has_many :guesses
+  has_many :boards, dependent: :destroy
+  has_many :guesses, dependent: :destroy
 
   validates :max_guesses, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :num_of_boards, presence: true, numericality: { only_integer: true, greater_than: 0 }

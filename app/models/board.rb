@@ -1,7 +1,7 @@
 class Board < ApplicationRecord
   belongs_to :wordle
   belongs_to :answer
-  has_many :board_rows
+  has_many :board_rows, dependent: :destroy
 
   def board_won?
     if self.answer.word == self.wordle.guesses.last.word

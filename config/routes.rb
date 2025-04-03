@@ -13,4 +13,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   post "login" => "authentication#authenticate"
+
+  get "me" => "me#index"
+  patch "me" => "me#update"
+  put "me" => "me#update"
+  delete "me" => "me#destroy"
 end
